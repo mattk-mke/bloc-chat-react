@@ -40,7 +40,7 @@ class App extends Component {
       <div className="App">
         <User firebase={firebase} setUser={user => this.setUser(user)} currentUser={this.state.currentUser} />
         <RoomList firebase={firebase} handleRoomClick={(room, e) => this.handleRoomClick(room, e)} />
-        <MessageList firebase={firebase} currentRoom={this.state.currentRoom} />
+        <MessageList firebase={firebase} currentRoom={this.state.currentRoom} currentUser={this.state.currentUser} />
       </div>
     );
   }

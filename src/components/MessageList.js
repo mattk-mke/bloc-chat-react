@@ -4,7 +4,8 @@ class MessageList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: []
+      messages: [],
+      newMessage: ''
     };
 
     this.messagesRef = this.props.firebase.database().ref('messages');
@@ -17,15 +18,29 @@ class MessageList extends Component {
     const year = date.getFullYear();
     const hours = date.getHours();
     const minutes = "0" + date.getMinutes();
-    const time = month + '/' + day + '/' + year + ' @ ' + hours + ':' + minutes.substr(-2);
+    const time = month + '/' + day + '/' + year + ' @ ' + hours + ':' + minutes.substr(-2) + ' UTC';
     return time;
+  }
+
+  sendMessage(e) {
+    e.preventDefault();
+    this.messagesRef.push({
+      content: this.state.newMessage,
+      roomId: this.props.currentRoom.key,
+      sentAt: Date.now() / 1000,
+      username: this.props.currentUser.displayName
+    });
+  }
+
+  handleChange(e) {
+    this.setState({newMessage: e.target.value});
   }
 
   componentDidMount() {
     this.messagesRef.on('child_added', snapshot => {
       const message = snapshot.val();
       message.key = snapshot.key;
-      this.setState({ messages: this.state.messages.concat(message) });
+      this.setState({ messages: this.state.messages.concat(message), newMessage: '' });
     });
   }
 
@@ -40,8 +55,15 @@ class MessageList extends Component {
               <p className="message-content">{message.content}</p>
               <p className="message-timestamp">Sent: {this.timeConvert(message.sentAt)}</p>
             </div>
-          ) || <div className="empty">There are no messages in this room</div>}
+          )}
         )}
+        {(this.props.currentRoom.length === 0) ? null :
+          <form className="send-message" onSubmit={this.sendMessage.bind(this)}>
+              <input id="message-input" type="text" value={this.state.newMessage} onChange={(e) => this.handleChange(e)} placeholder="Enter a new message..." />
+              <input type="submit" id="send" value="Send" />
+          </form>
+        }
+        
       </section>
     );
   }
