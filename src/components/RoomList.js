@@ -89,8 +89,8 @@ class RoomList extends Component {
               <div className="room-row" key={room.key}>
                 <li className="room-data"  onClick={this.props.handleRoomClick.bind(this, room)}>{room.name}</li>
                 <div className="room-actions">
-                  <button className="delete-room icon ion-md-trash" onClick={this.deleteRoom.bind(this, room)} />
-                  <button className="rename-room-button icon ion-md-create" onClick={this.handleRenameToggle.bind(this, room)} />
+                  <button className="delete-room icon ion-md-trash" onClick={this.deleteRoom.bind(this, room)} title="Delete room"/>
+                  <button className="rename-room-button icon ion-md-create" onClick={this.handleRenameToggle.bind(this, room)} title="Rename room" />
                   <form id={"rename-room-" + room.key} style={{display: "none"}} onSubmit={this.renameRoom.bind(this, room)} >
                     <input className="rename-input" type="text" value={this.state.rnewname} onChange={this.handleRnewnameChange.bind(this)} placeholder="Enter a new room name..." />
                     <input className="rename-button" type="submit" value="Rename" />

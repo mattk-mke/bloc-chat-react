@@ -5,7 +5,8 @@ class MessageList extends Component {
     super(props);
     this.state = {
       messages: [],
-      newMessage: ''
+      newMessage: '',
+      newMessageEdit: ''
     };
 
     this.messagesRef = this.props.firebase.database().ref('messages');
@@ -36,11 +37,48 @@ class MessageList extends Component {
     this.setState({newMessage: e.target.value});
   }
 
+
+  deleteMessage(message, e) {
+    this.messagesRef.child(message.key).remove();
+  }
+
+  editMessage(message, e) {
+    e.preventDefault();
+    this.messagesRef.child(message.key).update({content: this.state.newMessageEdit})
+  }
+
+  handleEditChange(e) {
+    this.setState({newMessageEdit: e.target.value});
+  }
+
+  handleEditToggle(message) {
+    let inputBox = document.getElementById("edit-message-" + message.key);
+    if (inputBox.style.display === "none") {
+      inputBox.style.display = "block";
+    } else {
+      inputBox.style.display = "none";
+    }
+  }
+
   componentDidMount() {
     this.messagesRef.on('child_added', snapshot => {
       const message = snapshot.val();
       message.key = snapshot.key;
       this.setState({ messages: this.state.messages.concat(message), newMessage: '' });
+    });
+    this.messagesRef.on('child_removed', snapshot => {
+      const message = snapshot.val();
+      message.key = snapshot.key;
+      this.setState({ messages: this.state.messages.filter((msg) => msg.key !== message.key)});
+    });
+    this.messagesRef.on('child_changed', snapshot => {
+      const message = snapshot.val();
+      message.key = snapshot.key;
+      var messageSlice = this.state.messages.slice();
+      const index = messageSlice.map(e => e.key).indexOf(message.key);
+      messageSlice[index] = message;
+      this.setState({messages: messageSlice, newMessageEdit: ''});
+      this.handleEditToggle(message);
     });
   }
 
@@ -54,6 +92,14 @@ class MessageList extends Component {
               <h2 className="message-username">{message.username}</h2>
               <p className="message-content">{message.content}</p>
               <p className="message-timestamp">Sent: {this.timeConvert(message.sentAt)}</p>
+              <div className="room-actions">
+                  <button className="delete-message icon ion-md-trash" onClick={this.deleteMessage.bind(this, message)} title="Delete message" />
+                  <button className="edit-message-button icon ion-md-create" onClick={this.handleEditToggle.bind(this, message)} title="Edit message" />
+                  <form id={"edit-message-" + message.key} style={{display: "none"}} onSubmit={this.editMessage.bind(this, message)} >
+                    <input className="edit-input" type="text" value={this.state.newMessageEdit} onChange={this.handleEditChange.bind(this)} placeholder="Enter new message contents..." />
+                    <input className="edit-button" type="submit" value="Save" />
+                  </form>
+              </div>
             </div>
           )}
         )}
