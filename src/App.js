@@ -26,11 +26,14 @@ class App extends Component {
     };
   }
   
+  handleRoomReset() {
+    this.setState({currentRoom: [] });
+  }
+
   handleRoomClick(room, e) {
     this.setState({currentRoom: room});
-    console.log(room.key);
   }
-   
+  
   setUser(user) {
     this.setState({currentUser: user})
   }
@@ -39,7 +42,7 @@ class App extends Component {
     return (
       <div className="App">
         <User firebase={firebase} setUser={user => this.setUser(user)} currentUser={this.state.currentUser} />
-        <RoomList firebase={firebase} handleRoomClick={(room, e) => this.handleRoomClick(room, e)} />
+        <RoomList firebase={firebase} handleRoomClick={(room, e) => this.handleRoomClick(room, e)} handleRoomReset={this.handleRoomReset.bind(this)} />
         <MessageList firebase={firebase} currentRoom={this.state.currentRoom} currentUser={this.state.currentUser} />
       </div>
     );
