@@ -12,6 +12,7 @@ class MessageList extends Component {
 
     this.messagesRef = this.props.firebase.database().ref('messages');
     this.usersRef = this.props.firebase.database().ref('users');
+    this.roomsRef = this.props.firebase.database().ref('rooms');
   }
 
   timeConvert(unix) {
@@ -36,6 +37,7 @@ class MessageList extends Component {
       username: (this.props.currentUser === null) ? "Guest User" : this.props.currentUser.displayName,
       uid: (this.props.currentUser === null) ? "guest" : this.props.currentUser.uid
     });
+    this.roomsRef.child(this.props.currentRoom.key).set({isTyping: false, name: this.props.currentRoom.name});
   }
 
   scrollToBottom = () => {
@@ -44,6 +46,7 @@ class MessageList extends Component {
 
   handleChange(e) {
     this.setState({newMessage: e.target.value});
+    this.roomsRef.child(this.props.currentRoom.key).set({isTyping: true, name: this.props.currentRoom.name});
   }
 
 
@@ -58,6 +61,7 @@ class MessageList extends Component {
 
   handleEditChange(e) {
     this.setState({newMessageEdit: e.target.value});
+    this.roomsRef.child(this.props.currentRoom.key).set({isTyping: true, name: this.props.currentRoom.name});
   }
 
   handleEditToggle(message) {
@@ -69,7 +73,6 @@ class MessageList extends Component {
     }
   }
 
-
   handleActiveIcon(user) {
     const icon = document.getElementsByClassName("online-" + user.uid);
     for (let i = 0; i < icon.length; i++ ) {
@@ -77,6 +80,17 @@ class MessageList extends Component {
         icon[i].style.color = "#56e038";
       } else {
         icon[i].style.color = "#d4d4d4";
+      }
+    }
+  }
+
+  handleTypingIndicator(isTyping) {
+    const typing = document.getElementById("typing-indicator");
+    if (this.props.currentRoom.length !== 0 ) {
+      if (isTyping) {
+        typing.style.display = "block";
+      } else {
+        typing.style.display = "none";
       }
     }
   }
@@ -122,6 +136,12 @@ class MessageList extends Component {
       this.setState({users: userSlice});
       this.handleActiveIcon(user);
     });
+
+    this.roomsRef.on('child_changed', snapshot => {
+      const room = snapshot.val();
+      room.key = snapshot.key;
+      this.handleTypingIndicator(room.isTyping)
+    });
   }
 
   componentDidUpdate() {
@@ -160,10 +180,12 @@ class MessageList extends Component {
               </div>
             )}
           )}
+          {}
           <div style={{ float:"left", clear: "both" }}
               ref={(el) => { this.messagesEnd = el; }}>
           </div>
         </section>
+        <div id="typing-indicator" style={{display: "none"}}>Someone is typing...</div>
         {(this.props.currentRoom.length === 0) ? null :
               <section className="sticky-message">
                 <form className="send-message mdl-textfield mdl-js-textfield" onSubmit={this.sendMessage.bind(this)}>

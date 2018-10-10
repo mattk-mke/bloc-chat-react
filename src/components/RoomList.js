@@ -80,8 +80,10 @@ class RoomList extends Component {
       var roomSlice = this.state.rooms.slice();
       const index = roomSlice.map(e => e.key).indexOf(room.key);
       roomSlice[index] = room;
-      this.setState({rooms: roomSlice, rnewname: ''});
-      this.handleRenameToggle(room);
+      if (roomSlice[index].name !== this.state.rooms[index].name) {
+        this.setState({rooms: roomSlice, rnewname: ''});
+        this.handleRenameToggle(room);
+      }
     });
 
   }
