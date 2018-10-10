@@ -40,9 +40,20 @@ class App extends Component {
   
   render() {
     return (
-      <div className="App">
-        <User firebase={firebase} setUser={user => this.setUser(user)} currentUser={this.state.currentUser} />
-        <RoomList firebase={firebase} handleRoomClick={(room, e) => this.handleRoomClick(room, e)} handleRoomReset={this.handleRoomReset.bind(this)} />
+      <div className="App mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+        <header className="mdl-layout__header">
+          <h1 className="room-title mdl-layout-title">{this.state.currentRoom.name}</h1>
+        </header>
+
+        <div className="rooms mdl-layout__drawer" >
+          <header className="drawer-header">
+            <h1 className="bloc-chat drawer-header">Bloc Chat</h1>
+            <User firebase={firebase} setUser={user => this.setUser(user)} currentUser={this.state.currentUser} />
+          </header>
+          <RoomList firebase={firebase} handleRoomClick={(room, e) => this.handleRoomClick(room, e)} handleRoomReset={this.handleRoomReset.bind(this)} />
+        </div>
+        <nav className="rooms-nav mdl-navigation"></nav>
+        
         <MessageList firebase={firebase} currentRoom={this.state.currentRoom} currentUser={this.state.currentUser} />
       </div>
     );

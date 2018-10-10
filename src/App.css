@@ -1,3 +1,214 @@
 .App {
 
 }
+
+.drawer-header {
+  background-color: #FFFFFF;
+}
+.bloc-chat {
+  font-size: 50px;
+  font-weight: bold;
+  padding-left: 5px;
+}
+
+.greeting-icon {
+  font-size: 100px;
+  color: #E040FB;
+  margin-top: 10%;
+  text-align: center;
+  width: 100%;
+
+}
+
+.greeting {
+  text-align: center;
+  /* width: 100%; */
+  margin-top: 10%;
+  padding: 10px 30px;
+}
+
+#avatar {
+  height: 60px;
+  width: relative;
+  border-radius: 50%;
+  padding: 10px;
+}
+
+.current-user {
+  font-size: 18px;
+  padding: 10px;
+}
+
+#sign-out {
+  margin-left: 30px;
+}
+
+#sign-in {
+  margin-left: 30px;
+}
+
+.room-actions {
+  float: right;
+  padding: 16px 5px;
+  
+}
+
+
+.room-name {
+  float: left;
+}
+
+.rename-input {
+  /* float: left; */
+  padding: 5px;
+  width: 80%;
+  margin-left: 10%;
+}
+
+.rename-button {
+  margin-left: 30%;
+}
+
+.dialog-title {
+  font-size: 22px;
+}
+
+.current-room {
+  margin-bottom: 60px;
+}
+
+.room-title {
+  font-size: 26px;
+  margin-left: 3%;
+}
+
+.sticky-message {
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  bottom: 0;
+  background-color: #3F51B5;
+  padding: 5px
+}
+
+
+
+.send-message {
+  
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* margin-top: 0.5%; */
+  padding: 5px .5% 5px .5%;
+
+}
+
+#message-input {
+  float: left;
+  height: 80%;
+  width: 75%;
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  padding: 5px;
+}
+
+.submit-container {
+  float: left;
+  display: block;
+  width: 18%;
+  padding-left: 1%;
+  padding-top: 3px;
+}
+
+#send {
+  height: 100%;
+  position: unset;
+  bottom: unset;
+}
+
+.message {
+  float: left;
+  clear: left;
+  width: 100%;
+}
+
+
+.message:nth-child(even) {
+  background-color: #FFFFFF;
+}
+
+.message:nth-child(odd) {
+  background-color: #EEEEEE;
+}
+
+.message-username {
+  float: left;
+  clear: left;
+  font-size: 22px;
+  font-weight: bold;
+  width: 20%;
+  margin: 10px;
+  line-height: .5;
+}
+
+.message-content {
+  font-size: 16px;
+  float: left;
+  clear: left;
+  width: 60%;
+  margin: 10px;
+}
+
+.message-timestamp {
+  float: right;
+  clear: right;
+  width: 20%;
+  line-height: .5;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.message-actions {
+  line-height: .5;
+  float: right;
+  clear: right;
+  padding-right: 10px;
+}
+
+.edit-input {
+  padding: 10px;
+}
+
+.rooms-list {
+  margin-bottom: 30px;
+}
+
+.room-input {
+
+  float: left;
+  width: 100%;
+}
+
+#rname {
+  padding: 10px;
+}
+.cancel, .create {
+  float: left;
+  width: 50%;
+}
+
+.create-container {
+  position: sticky;
+  bottom: 20px;
+  margin-left: 25%;
+  /* left: 24%;
+  width: 100%; */
+}
+
+#create-room {
+  /* position: relative;
+  bottom: 20px;
+  left: 24%;
+  width: 100%; */
+}
+

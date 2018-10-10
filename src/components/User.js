@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import avatar from './../assets/guest-avatar.png';
 
 class User extends Component {
   constructor(props) {
@@ -28,10 +28,20 @@ class User extends Component {
   render() {
     
     return (
-      <div className="user-auth">
-        <button id="sign-in" onClick={this.handleClickSignIn.bind(this)}>Sign In</button>
-        <button id="sign-out" onClick={this.handleClickSignOut.bind(this)}>Sign Out</button>
-        <div>Current user: {(this.props.currentUser === null) ? "Guest" : this.props.currentUser.displayName}</div>
+      <div className="user-auth drawer-header">
+        {
+          !this.props.currentUser ? 
+          <div>
+            <img id="avatar" src={avatar} alt="Avatar"/>
+            <button id="sign-in" onClick={this.handleClickSignIn.bind(this)} className="mdl-button mdl-js-button mdl-button--primary">Sign In</button>
+            <div className="current-user">Guest User</div>
+          </div> :
+          <div>
+            <img id="avatar" src={this.props.currentUser.photoURL} alt="Avatar"/>
+            <button id="sign-out" onClick={this.handleClickSignOut.bind(this)} className="mdl-button mdl-js-button mdl-button--primary">Sign Out</button>
+            <div className="current-user">{this.props.currentUser.displayName}</div>
+          </div>
+        }
       </div>
     );
   }
