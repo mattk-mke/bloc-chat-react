@@ -3,6 +3,7 @@ import './App.css';
 import RoomList from './components/RoomList';
 import MessageList from './components/MessageList';
 import User from './components/User';
+import bloclogo from './assets/bloc-logo.jpg';
 import * as firebase from 'firebase';
 
  // Initialize Firebase
@@ -47,7 +48,8 @@ class App extends Component {
 
         <div className="rooms mdl-layout__drawer" >
           <header className="drawer-header">
-            <h1 className="bloc-chat drawer-header">Bloc Chat</h1>
+            <img src={bloclogo} id="bloc-logo" alt="Bloc logo"/>
+            <h1 className="bloc-chat drawer-header">Chat</h1>
             <User firebase={firebase} setUser={user => this.setUser(user)} currentUser={this.state.currentUser} />
           </header>
           <RoomList firebase={firebase} handleRoomClick={(room, e) => this.handleRoomClick(room, e)} handleRoomReset={this.handleRoomReset.bind(this)} />
