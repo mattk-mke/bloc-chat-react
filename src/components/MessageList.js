@@ -6,10 +6,12 @@ class MessageList extends Component {
     this.state = {
       messages: [],
       newMessage: '',
-      newMessageEdit: ''
+      newMessageEdit: '',
+      users: []
     };
 
     this.messagesRef = this.props.firebase.database().ref('messages');
+    this.usersRef = this.props.firebase.database().ref('users');
   }
 
   timeConvert(unix) {
@@ -31,7 +33,8 @@ class MessageList extends Component {
       content: this.state.newMessage,
       roomId: this.props.currentRoom.key,
       sentAt: Date.now() / 1000,
-      username: (this.props.currentUser === null) ? "Guest User" : this.props.currentUser.displayName
+      username: (this.props.currentUser === null) ? "Guest User" : this.props.currentUser.displayName,
+      uid: (this.props.currentUser === null) ? "guest" : this.props.currentUser.uid
     });
   }
 
@@ -58,7 +61,7 @@ class MessageList extends Component {
   }
 
   handleEditToggle(message) {
-    let inputBox = document.getElementById("edit-message-" + message.key);
+    const inputBox = document.getElementById("edit-message-" + message.key);
     if (inputBox.style.display === "none") {
       inputBox.style.display = "block";
     } else {
@@ -66,7 +69,20 @@ class MessageList extends Component {
     }
   }
 
+
+  handleActiveIcon(user) {
+    const icon = document.getElementsByClassName("online-" + user.uid);
+    for (let i = 0; i < icon.length; i++ ) {
+      if (user.online === true) {
+        icon[i].style.color = "#56e038";
+      } else {
+        icon[i].style.color = "#d4d4d4";
+      }
+    }
+  }
+
   componentDidMount() {
+    // Message event listeners
     this.messagesRef.on('child_added', snapshot => {
       const message = snapshot.val();
       message.key = snapshot.key;
@@ -88,6 +104,24 @@ class MessageList extends Component {
       this.setState({messages: messageSlice, newMessageEdit: ''});
       this.handleEditToggle(message);
     });
+
+    // User activity indicator event listeners
+    this.usersRef.on('child_added', snapshot => {
+      const user = snapshot.val();
+      user.key = snapshot.key;
+      this.setState({ users: this.state.users.concat(user)});
+      this.handleActiveIcon(user);
+    });
+
+    this.usersRef.on('child_changed', snapshot => {
+      const user = snapshot.val();
+      user.key = snapshot.key;
+      var userSlice = this.state.users.slice();
+      const index = userSlice.map(e => e.key).indexOf(user.key);
+      userSlice[index] = user;
+      this.setState({users: userSlice});
+      this.handleActiveIcon(user);
+    });
   }
 
   componentDidUpdate() {
@@ -107,15 +141,16 @@ class MessageList extends Component {
           {this.state.messages.filter(msg => msg.roomId === this.props.currentRoom.key).map((message, index) => {
             return (
               <div className="message" key={index}>
+                <i className={"activity-icon online-" + message.uid + " material-icons"} style={{color: (this.state.users[this.state.users.map((e) => e.key).indexOf(message.uid)].online) ? "#56e038" : "#d4d4d4"}}>person</i>
                 <h2 className="message-username">{message.username}</h2>
                 <p className="message-content">{message.content}</p>
                 <p className="message-timestamp">Sent: {this.timeConvert(message.sentAt)}</p>
                 <div className="message-actions">
                     <button className="delete-message-button mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onClick={this.deleteMessage.bind(this, message)} title="Delete message">
-                      <i class="material-icons">delete</i>
+                      <i className="material-icons">delete</i>
                     </button>
                     <button className="edit-message-button mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onClick={this.handleEditToggle.bind(this, message)} title="Edit message">
-                      <i class="material-icons">edit</i>
+                      <i className="material-icons">edit</i>
                     </button>
                     <form id={"edit-message-" + message.key} style={{display: "none"}} onSubmit={this.editMessage.bind(this, message)} >
                       <input className="edit-input mdl-textfield mdl-js-textfield" type="text" value={this.state.newMessageEdit} onChange={this.handleEditChange.bind(this)} placeholder="Enter new message contents..." />

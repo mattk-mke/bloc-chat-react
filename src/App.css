@@ -1,7 +1,3 @@
-.App {
-
-}
-
 .drawer-header {
   background-color: #FFFFFF;
 }
@@ -37,6 +33,7 @@
 .current-user {
   font-size: 18px;
   padding: 10px;
+  font-weight: bold;
 }
 
 #sign-out {
@@ -59,7 +56,6 @@
 }
 
 .rename-input {
-  /* float: left; */
   padding: 5px;
   width: 80%;
   margin-left: 10%;
@@ -79,7 +75,7 @@
 
 .room-title {
   font-size: 26px;
-  margin-left: 3%;
+  margin-left: 20px;
 }
 
 .sticky-message {
@@ -91,14 +87,11 @@
   padding: 5px
 }
 
-
-
 .send-message {
   
   display: block;
   width: 100%;
   height: 100%;
-  /* margin-top: 0.5%; */
   padding: 5px .5% 5px .5%;
 
 }
@@ -141,21 +134,27 @@
   background-color: #EEEEEE;
 }
 
+.activity-icon {
+  float: left;
+  padding: 5px 0px 0px 5px;
+  
+}
+
 .message-username {
   float: left;
-  clear: left;
+  /* clear: left; */
   font-size: 22px;
   font-weight: bold;
   width: 20%;
   margin: 10px;
-  line-height: .5;
+  line-height: 1;
 }
 
 .message-content {
   font-size: 16px;
   float: left;
   clear: left;
-  width: 60%;
+  width: 70%;
   margin: 10px;
 }
 
@@ -163,7 +162,7 @@
   float: right;
   clear: right;
   width: 20%;
-  line-height: .5;
+  line-height: 1;
   text-align: right;
   padding-right: 10px;
 }
@@ -201,14 +200,4 @@
   position: sticky;
   bottom: 20px;
   margin-left: 25%;
-  /* left: 24%;
-  width: 100%; */
 }
-
-#create-room {
-  /* position: relative;
-  bottom: 20px;
-  left: 24%;
-  width: 100%; */
-}
-

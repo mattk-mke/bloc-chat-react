@@ -7,7 +7,8 @@ class User extends Component {
     this.state = {
 
     }
-
+    
+    this.usersRef = this.props.firebase.database().ref('users');
   }
 
   handleClickSignIn() {
@@ -17,12 +18,34 @@ class User extends Component {
 
   handleClickSignOut() {
     this.props.firebase.auth().signOut();
+    this.usersRef.child(this.props.currentUser.uid).set({
+      username: this.props.currentUser.displayName,
+      online: false,
+      photoURL: this.props.currentUser.photoURL
+    });
   }
 
   componentDidMount() {
     this.props.firebase.auth().onAuthStateChanged( user => {
       this.props.setUser(user);
-    });
+      if (this.props.currentUser) {
+        this.usersRef.child(this.props.currentUser.uid).set({
+          username: this.props.currentUser.displayName,
+          online: true,
+          photoURL: this.props.currentUser.photoURL
+        })}
+      });
+
+    
+
+    window.addEventListener('beforeunload', (e) => {
+      e.preventDefault();
+      this.usersRef.child(this.props.currentUser ? this.props.currentUser.uid : "guest").set({
+        online: false,
+        username: this.props.currentUser ? this.props.currentUser.displayName : "guest user",
+        photoURL: this.props.currentUser ? this.props.currentUser.photoURL : './../assets/guest-avatar.png'
+      });
+    })
   }
 
   render() {

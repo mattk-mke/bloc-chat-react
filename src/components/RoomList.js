@@ -118,10 +118,10 @@ class RoomList extends Component {
                 <div className="room-name mdl-navigation__link"  onClick={this.props.handleRoomClick.bind(this, room)}>{room.name}</div>
                   <div className="room-actions">
                     <button className="delete-room-button mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onClick={this.deleteRoom.bind(this, room)} title="Delete room">
-                      <i class="material-icons">delete</i>
+                      <i className="material-icons">delete</i>
                     </button>
                     <button className="rename-room-button mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onClick={this.handleRenameToggle.bind(this, room)} title="Rename room">
-                      <i class="material-icons">edit</i>
+                      <i className="material-icons">edit</i>
                     </button>
                     </div>
                   <form id={"rename-room-" + room.key} style={{display: "none"}} onSubmit={this.renameRoom.bind(this, room)} >
