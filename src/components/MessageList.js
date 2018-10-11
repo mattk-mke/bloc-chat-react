@@ -84,16 +84,7 @@ class MessageList extends Component {
     }
   }
 
-  handleTypingIndicator(isTyping) {
-    const typing = document.getElementById("typing-indicator");
-    if (this.props.currentRoom.length !== 0 ) {
-      if (isTyping) {
-        typing.style.display = "block";
-      } else {
-        typing.style.display = "none";
-      }
-    }
-  }
+  
 
   componentDidMount() {
     // Message event listeners
@@ -140,7 +131,7 @@ class MessageList extends Component {
     this.roomsRef.on('child_changed', snapshot => {
       const room = snapshot.val();
       room.key = snapshot.key;
-      this.handleTypingIndicator(room.isTyping)
+      this.props.handleTypingIndicator(room.isTyping);
     });
   }
 

@@ -25,6 +25,8 @@ class App extends Component {
       currentRoom:[],
       currentUser: null
     };
+    
+    this.roomsRef = firebase.database().ref('rooms');
   }
   
   handleRoomReset() {
@@ -33,8 +35,22 @@ class App extends Component {
 
   handleRoomClick(room, e) {
     this.setState({currentRoom: room});
+    this.roomsRef.child(room.key).set({isTyping: false, name: room.name});
+    this.handleTypingIndicator(false);
+
   }
   
+  handleTypingIndicator(isTyping) {
+    const typing = document.getElementById("typing-indicator");
+    if (this.state.currentRoom.length !== 0 ) {
+      if (isTyping) {
+        typing.style.display = "block";
+      } else {
+        typing.style.display = "none";
+      }
+    }
+  }
+
   setUser(user) {
     this.setState({currentUser: user})
   }
@@ -56,7 +72,7 @@ class App extends Component {
         </div>
         <nav className="rooms-nav mdl-navigation"></nav>
         
-        <MessageList firebase={firebase} currentRoom={this.state.currentRoom} currentUser={this.state.currentUser} />
+        <MessageList firebase={firebase} currentRoom={this.state.currentRoom} currentUser={this.state.currentUser} handleTypingIndicator={this.handleTypingIndicator.bind(this)} />
       </div>
     );
   }
